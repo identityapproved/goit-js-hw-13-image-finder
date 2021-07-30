@@ -1,36 +1,42 @@
 import './css/main.css';
+import { refs } from "./js/refs"
 import { Notify } from 'notiflix';
 import API from './js/apiService';
 import imageCardTemp from "./templates/imageCard.hbs";
 
-const galleryWrapper = document.querySelector('.gallery');
-const input = document.querySelector('input')
+const apiService = new API();
 
-const searchForm = document.querySelector('#search-form')
-searchForm.addEventListener('submit', function onInputSearch(e) {
+refs.searchForm.addEventListener('submit', onInputSearch);
+   
+function onInputSearch(e) {
    e.preventDefault();
 
-   let inputValue = e.target.elements.searchQuery.value.trim();
+   apiService.resetPage();
+   refs.gallery.innerHTML = "";
+   apiService.query = refs.input.value;
 
-   API.fetchHits(inputValue)
-      .then(hits => {
-         renderFromSearch(hits);
-      })
-      .catch(error => {
-         console.log(error)
-         Notify.failure('Failure!')
-      })
-});
-
-function renderFromSearch(hits) {
-   if (hits.status === 404) {
-      Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+   if (!apiService.query) {
+      Notify.failure("Please, enter something...")
    } else {
-      renderHits(hits);
+      apiService.fetchHits(apiService.query)
+         .then(hits => {
+            if (hits['totalHits'] === 0) {
+               Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+            } else {
+               const imageCard = imageCardTemp(hits);
+               refs.gallery.insertAdjacentHTML("beforeend", imageCard);
+            }
+         })
+         .catch(error => {
+            console.log(error)
+         })
    }
 };
 
-function renderHits(hits) {
-   const imageCard = imageCardTemp(hits);
-   galleryWrapper.insertAdjacentHTML("beforeend", imageCard);
-}
+function onBtnShown() {
+      if (gallery.children) {
+      refs.loadMoreBtn.classList.remove('visually-hidden')
+   } else {
+      refs.loadMoreBtn.classList.add('visually-hidden')
+   }
+};
