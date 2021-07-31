@@ -103,7 +103,7 @@ input {
   padding-right: 15px;
 }
 
-.photo-card {
+.card {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -115,7 +115,7 @@ input {
     0px 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
-.photo-card:hover {
+.card:hover {
   transform: scale(1.06);
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }

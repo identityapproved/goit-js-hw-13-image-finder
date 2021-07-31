@@ -1,6 +1,8 @@
 {{#each hits}}
-<div class="photo-card">
+<div class="card">
+   <a href="{{largeImageURL}}">
    <img class="photo" src="{{webformatURL}}" alt="{{tags}}" loading="lazy" />
+   </a>
    <div class="info">
       <p class="info-item">
          <b>Likes {{likes}}</b>
