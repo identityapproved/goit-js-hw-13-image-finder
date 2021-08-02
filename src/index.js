@@ -42,6 +42,7 @@ function onInputSearch(e) {
    function renderImg(hits) {
       const imageCard = imageCardTemp(hits);
       refs.gallery.insertAdjacentHTML("beforeend", imageCard);
+      const lightbox = new SimpleLightbox('.card a', { /* options */ });
    }
    
    function onBtnShown() {
@@ -56,6 +57,15 @@ function onLoadMore() {
    apiService.incrementPage();
    apiService.fetchHits().then(r => {
       renderImg(r)
+
+      const { height: cardHeight } = document
+         .querySelector('.gallery')
+         .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+         top: cardHeight * 2,
+         behavior: 'smooth',
+      });
    }).catch(error => {
       console.log(error)
    })
@@ -68,8 +78,7 @@ function onGalleryClick(e) {
    } else {
       const currentImg = e.target;
       console.log("~ currentImg", currentImg)
-      const lightbox = new SimpleLightbox('.card a', { /* options */ });
       lightbox.on('show.simplelightbox');
    }
-
 }
+
